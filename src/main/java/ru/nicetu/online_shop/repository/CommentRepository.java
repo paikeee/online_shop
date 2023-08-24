@@ -3,17 +3,14 @@ package ru.nicetu.online_shop.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import ru.nicetu.online_shop.models.PersonRole;
-import ru.nicetu.online_shop.models.Role;
-
+import ru.nicetu.online_shop.models.Comment;
 
 import java.util.Optional;
 
 @Repository
 @Transactional
-public interface RoleRepository extends JpaRepository<Role, Integer> {
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
-    Optional<Role> findByName(PersonRole name);
+    Optional<Comment> findByCommentId(int id);
+
 }
-

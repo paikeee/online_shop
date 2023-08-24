@@ -19,12 +19,12 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
 
     boolean existsByEmail(String email);
 
-    @Modifying
-    @Query("UPDATE Person p set p.password = ?2 where p.email = ?1")
-    void changePassword(String email, String password);
-
-    @Modifying
-    @Query("UPDATE Person p set p.name = ?2, p.surname = ?3 where p.email = ?1")
-    void changeName(String email, String name, String surname);
+//    @Modifying
+//    @Query("UPDATE Person p set p.password = ?2 where p.email = ?1")
+//    void changePassword(String email, String password);
+//
+//    @Modifying
+//    @Query("UPDATE Person p set p.name = ?2, p.surname = ?3 where p.email = ?1")
+//    void changeName(String email, String name, String surname);
 
 }

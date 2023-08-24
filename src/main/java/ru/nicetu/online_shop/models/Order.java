@@ -22,7 +22,6 @@ public class Order {
         this.date = LocalDate.now();
         this.paymentDone = false;
         this.person = person;
-        this.orderProducts = new ArrayList<>();
     }
 
     @Id
