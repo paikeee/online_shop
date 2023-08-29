@@ -28,8 +28,7 @@ public class CatalogController {
     private final TypeServiceImpl typeService;
     private final ProductServiceImpl productService;
     private final CommentServiceImpl commentService;
-    private final PersonDetailsService personDetailsService;
-    private final PictureServiceImpl pictureService;
+
 
     @GetMapping(path = "/types")
     public ResponseEntity<?> getTypes() {
@@ -38,10 +37,7 @@ public class CatalogController {
 
     @GetMapping(path = "/{typeId}")
     public ResponseEntity<TypeProductsDTO> getProducts(@PathVariable("typeId") int typeId) {
-        return ResponseEntity.ok(new TypeProductsDTO(
-                typeService.getProductsByType(typeId).stream()
-                        .map(ProductTypeResponse::new)
-                        .collect(Collectors.toList())));
+        return ResponseEntity.ok(typeService.buildTypeProducts(typeId));
     }
 
     @GetMapping(path = "/product/{productId}")
@@ -54,16 +50,7 @@ public class CatalogController {
     public ResponseEntity<?> addComment(@PathVariable("productId") int productId,
                                         @RequestPart("request") @Valid CommentRequest request,
                                         @RequestPart("image") List<MultipartFile> files) {
-        Comment comment = new Comment(
-                request.getRating(),
-                request.getText(),
-                productService.findById(productId),
-                personDetailsService.currentUser()
-        );
-        commentService.save(comment);
-        if (files.size() != 1 || !Objects.equals(files.get(0).getOriginalFilename(), "")) {
-            comment.setPictures(pictureService.save(files, comment));
-        }
+        Comment comment = commentService.addComment(productId, request, files);
         return ResponseEntity.ok(new CommentResponse(
                 comment.getCommentId(),
                 productId,

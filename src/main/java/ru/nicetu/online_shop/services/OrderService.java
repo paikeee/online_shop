@@ -23,4 +23,6 @@ public interface OrderService {
 
     void makePurchase(int id);
 
+    void checkCustomer(Order order);
+
 }

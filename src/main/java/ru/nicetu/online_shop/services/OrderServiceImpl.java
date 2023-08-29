@@ -98,4 +98,11 @@ public class OrderServiceImpl implements OrderService {
         save(order);
     }
 
+    @Override
+    public void checkCustomer(Order order) {
+        if (!personDetailsService.currentUser().equals(order.getPerson())) {
+            throw new RuntimeException("No access");
+        }
+    }
+
 }

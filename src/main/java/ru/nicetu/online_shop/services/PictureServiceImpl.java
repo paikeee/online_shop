@@ -21,7 +21,7 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     public void save(List<MultipartFile> files, Product product) {
-        if (files.size() != 1 || !Objects.equals(files.get(0).getOriginalFilename(), "")) {
+        if (files.size() == 1 && !Objects.equals(files.get(0).getOriginalFilename(), "")) {
             return;
         }
         for (MultipartFile file : files) {

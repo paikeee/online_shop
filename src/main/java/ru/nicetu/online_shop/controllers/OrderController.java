@@ -31,6 +31,7 @@ public class OrderController {
     @GetMapping(path = "/{orderId}")
     public ResponseEntity<OrderDTO> getOrder(@PathVariable("orderId") int orderId) {
         Order order = orderService.getOrder(orderId);
+        orderService.checkCustomer(order);
         return ResponseEntity.ok(new OrderDTO(
                 order.getOrderId(),
                 orderService.getTotalPrice(order.getOrderProducts()),
@@ -41,6 +42,7 @@ public class OrderController {
 
     @GetMapping(path = "/{orderId}/purchase")
     public ResponseEntity<?> makePurchase(@PathVariable("orderId") int orderId) {
+        orderService.checkCustomer(orderService.getOrder(orderId));
         try {
             orderService.makePurchase(orderId);
         } catch (MailException mailException) {
