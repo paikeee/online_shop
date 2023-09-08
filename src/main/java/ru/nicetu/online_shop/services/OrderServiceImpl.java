@@ -1,16 +1,15 @@
 package ru.nicetu.online_shop.services;
 
 import lombok.AllArgsConstructor;
-import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import ru.nicetu.online_shop.dto.request.OrderRequest;
 import ru.nicetu.online_shop.dto.response.OrderDTO;
 import ru.nicetu.online_shop.models.Order;
 import ru.nicetu.online_shop.models.OrderProduct;
 import ru.nicetu.online_shop.models.Person;
-import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.repository.OrderRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -42,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void deleteSelectedProducts(List<OrderProduct> orderProducts) {
         checkSelectedProducts(orderProducts);
         orderProducts.stream()
@@ -64,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderDTO newOrder(OrderRequest request) {
         Person person = personDetailsService.findByEmail(request.getEmail());
         Order order = new Order(person);
@@ -87,6 +88,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void makePurchase(int id) {
         Order order = getOrder(id);
         emailService.sendEmail(

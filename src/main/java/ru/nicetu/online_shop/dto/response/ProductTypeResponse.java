@@ -1,6 +1,5 @@
 package ru.nicetu.online_shop.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import ru.nicetu.online_shop.models.Picture;
 import ru.nicetu.online_shop.models.Product;
@@ -15,6 +14,7 @@ public class ProductTypeResponse {
     private final String name;
     private final String description;
     private final int price;
+    private final int actualPrice;
     private final int amount;
     private final int discount;
     private final List<byte[]> pictures;
@@ -25,6 +25,7 @@ public class ProductTypeResponse {
         this.name = product.getName();
         this.description = product.getDescription();
         this.price = product.getPrice();
+        this.actualPrice = product.getActualPrice();
         this.amount = product.getAmount();
         this.discount = product.getDiscount();
         this.pictures = product.getPictureList().stream()

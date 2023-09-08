@@ -7,9 +7,10 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class TypeProductsDTO {
+public class AttributesDTO {
 
-    private List<ProductTypeResponse> products;
-    private List<AttributesDTO> attributes;
+    private int attributeId;
+    private String name;
+    private List<AttributeValueDTO> attributeValues;
 
 }

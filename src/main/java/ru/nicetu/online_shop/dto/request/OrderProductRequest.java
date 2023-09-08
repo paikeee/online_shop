@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
@@ -14,7 +13,7 @@ public class OrderProductRequest {
     @NotNull
     private int productId;
 
-    @NotEmpty
+    @NotNull
     @Min(value = 1)
     private int quantity;
 

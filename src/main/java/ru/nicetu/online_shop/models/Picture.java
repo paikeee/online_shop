@@ -39,6 +39,7 @@ public class Picture {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Product product;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "comment_picture",
             joinColumns = @JoinColumn(name = "picture_id"),

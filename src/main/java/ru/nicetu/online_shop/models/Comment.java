@@ -1,6 +1,8 @@
 package ru.nicetu.online_shop.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,12 +43,14 @@ public class Comment {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Product product;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "person_comment",
             joinColumns = @JoinColumn(name = "comment_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
     private Person person;
 
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "comment_picture",
             joinColumns = @JoinColumn(name = "comment_id"),

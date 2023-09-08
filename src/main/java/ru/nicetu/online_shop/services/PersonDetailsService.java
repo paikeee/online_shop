@@ -1,6 +1,7 @@
 package ru.nicetu.online_shop.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,5 +36,12 @@ public class PersonDetailsService implements UserDetailsService {
 
     public Person currentUser() {
         return findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    public boolean isAuth() {
+        return SecurityContextHolder.getContext().getAuthentication() != null &&
+                SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+                !(SecurityContextHolder.getContext().getAuthentication()
+                        instanceof AnonymousAuthenticationToken);
     }
 }

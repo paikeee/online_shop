@@ -13,8 +13,6 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 
     Optional<Type> findByTypeId(int id);
 
-    Optional<Type> findByName(String name);
-
     Iterable<Type> findTypesByParentId(int parentId);
 
 }

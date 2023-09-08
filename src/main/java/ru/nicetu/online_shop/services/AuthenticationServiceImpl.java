@@ -21,6 +21,7 @@ import ru.nicetu.online_shop.repository.PersonRepository;
 import ru.nicetu.online_shop.repository.RoleRepository;
 import ru.nicetu.online_shop.security.jwt.JwtUtils;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     private final JwtUtils jwtUtils;
 
     @Override
+    @Transactional
     public ResponseEntity<?> register(RegistrationRequest request) {
         if (personRepository.existsByEmail(request.getEmail())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already taken!"));

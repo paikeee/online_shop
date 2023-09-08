@@ -3,10 +3,15 @@ package ru.nicetu.online_shop.services;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.nicetu.online_shop.dto.request.TypeRequest;
+import ru.nicetu.online_shop.dto.response.AttributeValueDTO;
+import ru.nicetu.online_shop.dto.response.AttributesDTO;
+import ru.nicetu.online_shop.dto.response.ProductTypeResponse;
+import ru.nicetu.online_shop.dto.response.TypeProductsDTO;
 import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.models.Type;
 import ru.nicetu.online_shop.repository.TypeRepository;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,6 +39,7 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
+    @Transactional
     public void addType(Type type, TypeRequest request) {
         type.setProductList(
                 request.getProductList().stream()
@@ -42,14 +48,19 @@ public class TypeServiceImpl implements TypeService {
         save(type);
     }
 
-    public List<Product> getProductsByType(int id) {
-        Set<Product> products = new HashSet<>(findTypeById(id).getProductList());
-        typeRepository.findTypesByParentId(id)
-                .forEach(it -> products.addAll(getProductsByType(it.getTypeId())));
+    @Override
+    public List<Product> getProductsByType(Type type) {
+        Set<Product> products = new HashSet<>(type.getProductList());
+        typeRepository.findTypesByParentId(type.getTypeId())
+                .forEach(it -> {
+                    List<Product> childProduct = getProductsByType(it);
+                    products.addAll(childProduct);
+                });
         return new ArrayList<>(products);
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         Type type = findTypeById(id);
         getTypes().forEach(it -> {
@@ -62,6 +73,7 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
+    @Transactional
     public void addProducts(int id, List<Integer> productsList) {
         Type type = findTypeById(id);
         Set<Product> productsSet = productsList.stream()
@@ -70,5 +82,33 @@ public class TypeServiceImpl implements TypeService {
         productsSet.addAll(type.getProductList());
         type.setProductList(new ArrayList<>(productsSet));
         save(type);
+    }
+
+    @Override
+    public TypeProductsDTO buildTypeProducts(int id) {
+        Type type = findTypeById(id);
+        return new TypeProductsDTO(
+                getProductsByType(type).stream()
+                        .map(ProductTypeResponse::new)
+                        .collect(Collectors.toList()),
+                type.getAttributes().stream()
+                        .map(it -> new AttributesDTO(
+                                it.getAttributeId(),
+                                it.getName(),
+                                it.getAttributeValues().stream()
+                                        .map(value -> new AttributeValueDTO(
+                                                value.getValueId(),
+                                                value.getValue()
+                                        )).collect(Collectors.toList())
+                                )).collect(Collectors.toList())
+        );
+    }
+
+    public List<Type> findChildTypes(Type type) {
+        List<Type> typeList = new ArrayList<>();
+        typeRepository.findTypesByParentId(type.getTypeId())
+                .forEach(it -> typeList.addAll(findChildTypes(it)));
+        typeList.add(type);
+        return typeList;
     }
 }

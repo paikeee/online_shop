@@ -58,6 +58,7 @@ public class Person {
             inverseJoinColumns = @JoinColumn(name = "order_id"))
     private Set<Order> order = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "person_comment",
             joinColumns = @JoinColumn(name = "person_id"),

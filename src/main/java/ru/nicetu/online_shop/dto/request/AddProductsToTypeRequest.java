@@ -2,21 +2,17 @@ package ru.nicetu.online_shop.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class TypeRequest {
+public class AddProductsToTypeRequest {
 
     @NotEmpty
-    private String typeName;
-
-    @NotNull
-    private int parentId;
-
     private List<Integer> productList;
 
 }

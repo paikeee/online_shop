@@ -2,21 +2,25 @@ package ru.nicetu.online_shop.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class TypeRequest {
+public class FilterRequest {
 
-    @NotEmpty
-    private String typeName;
+    private List<Integer> valuesId;
 
     @NotNull
-    private int parentId;
+    private int min;
 
-    private List<Integer> productList;
+    @NotNull
+    private int max;
+
+    @NotNull
+    private double rating;
 
 }

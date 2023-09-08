@@ -1,21 +1,19 @@
 package ru.nicetu.online_shop.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.nicetu.online_shop.dto.request.ProductRequest;
-import ru.nicetu.online_shop.dto.request.TypeRequest;
+import ru.nicetu.online_shop.dto.request.*;
+import ru.nicetu.online_shop.dto.response.AttributesDTO;
 import ru.nicetu.online_shop.dto.response.MessageResponse;
 import ru.nicetu.online_shop.dto.response.ProductDTO;
 import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.models.Type;
-import ru.nicetu.online_shop.services.CommentServiceImpl;
-import ru.nicetu.online_shop.services.PictureServiceImpl;
-import ru.nicetu.online_shop.services.ProductServiceImpl;
-import ru.nicetu.online_shop.services.TypeServiceImpl;
+import ru.nicetu.online_shop.services.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,6 +29,7 @@ public class AdminController {
     private final TypeServiceImpl typeService;
     private final PictureServiceImpl pictureService;
     private final CommentServiceImpl commentService;
+    private final AttributeServiceImpl attributeService;
 
     @PostMapping(path = "product/add")
     public ResponseEntity<ProductDTO> addProduct(@RequestPart("productRequest") @Valid ProductRequest request,
@@ -88,8 +87,35 @@ public class AdminController {
 
     @PostMapping(path = "/type/{typeId}/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MessageResponse> addProductsToType(@PathVariable("typeId") int typeId,
-                                                             @RequestBody List<Integer> productList) {
-        typeService.addProducts(typeId, productList);
+                                                             @RequestBody @Valid AddProductsToTypeRequest productList) {
+        typeService.addProducts(typeId, productList.getProductList());
         return ResponseEntity.ok(new MessageResponse("Type with id " + typeId + " has been modified"));
+    }
+
+    @PostMapping(path = "/type/{typeId}/attribute", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> addAttributesType(@PathVariable("typeId") int typeId,
+                                                             @RequestBody AttributeRequest request) {
+        attributeService.saveAttributes(typeId, request.getNameList());
+        return ResponseEntity.ok(new MessageResponse("Attributes have been added to type with id " + typeId));
+    }
+
+    @PostMapping(path = "/attribute/{attributeId}/delete")
+    public ResponseEntity<MessageResponse> deleteAttribute(@PathVariable("attributeId") int attributeId) {
+        attributeService.deleteAttribute(attributeId);
+        return ResponseEntity.ok(new MessageResponse("Attribute with id " + attributeId + " deleted"));
+    }
+
+    @PostMapping(path = "product/{productId}/settings/attribute", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> addAttributesProduct(@PathVariable("productId") int productId,
+                                                                @RequestBody String request) throws JsonProcessingException {
+        attributeService.saveProductAttributes(productId, new AttributeValueRequest(request).getValues());
+        return ResponseEntity.ok(new MessageResponse("Attributes have been added to product with id " + productId));
+    }
+
+    @GetMapping(path = "product/{productId}/settings/attribute")
+    public ResponseEntity<List<AttributesDTO>> getAttributesProduct(@PathVariable("productId") int productId) {
+        return ResponseEntity.ok(attributeService.buildAttributesDTO(
+                productService.getProduct(productId).getTypeList()
+        ));
     }
 }

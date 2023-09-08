@@ -8,9 +8,9 @@ import ru.nicetu.online_shop.models.Picture;
 import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.repository.PictureRepository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @Service
@@ -20,8 +20,9 @@ public class PictureServiceImpl implements PictureService {
     private final PictureRepository pictureRepository;
 
     @Override
+    @Transactional
     public void save(List<MultipartFile> files, Product product) {
-        if (files.size() == 1 && !Objects.equals(files.get(0).getOriginalFilename(), "")) {
+        if (files.size() == 1 && Objects.equals(files.get(0).getOriginalFilename(), "")) {
             return;
         }
         for (MultipartFile file : files) {
@@ -35,6 +36,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
+    @Transactional
     public List<Picture> save(List<MultipartFile> files, Comment comment) {
         List<Picture> pictures = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -49,13 +51,9 @@ public class PictureServiceImpl implements PictureService {
         return pictures;
     }
 
-    @Override
-    public Picture get(int id) {
-        return pictureRepository.findByPictureId(id)
-                .orElseThrow(() -> new NoSuchElementException("Picture with id " + id + " not found"));
-    }
 
     @Override
+    @Transactional
     public void delete(int id) {
         pictureRepository.deleteById(id);
     }

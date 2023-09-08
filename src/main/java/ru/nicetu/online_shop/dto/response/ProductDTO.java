@@ -14,6 +14,7 @@ public class ProductDTO {
     private final String name;
     private final String description;
     private final int price;
+    private final int actualPrice;
     private final int amount;
     private final int discount;
     private final List<byte[]> pictures;
@@ -25,6 +26,7 @@ public class ProductDTO {
         this.name = product.getName();
         this.description = product.getDescription();
         this.price = product.getPrice();
+        this.actualPrice = product.getActualPrice();
         this.amount = product.getAmount();
         this.discount = product.getDiscount();
         this.pictures = product.getPictureList().stream()

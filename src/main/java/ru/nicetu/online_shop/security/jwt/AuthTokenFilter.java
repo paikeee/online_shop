@@ -1,6 +1,5 @@
 package ru.nicetu.online_shop.security.jwt;
 
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

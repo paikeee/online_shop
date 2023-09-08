@@ -1,5 +1,6 @@
 package ru.nicetu.online_shop.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,11 +58,26 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "picture_id"))
     private List<Picture> pictureList = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_comment",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private List<Comment> commentList = new ArrayList<>();
+
+    @JsonBackReference
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "product_type",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "type_id"))
+    private List<Type> typeList = new ArrayList<>();
+
+    @JsonBackReference
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "product_attribute",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "value_id"))
+    private List<AttributeValue> attributeValues = new ArrayList<>();
 
     @Transient
     public int getActualPrice() {
@@ -70,8 +86,9 @@ public class Product {
 
     @Transient
     public double getRating() {
-        return ((double) commentList.stream()
+        double rating = ((double) commentList.stream()
                 .mapToInt(Comment::getRating).sum()) /
                 ((double) commentList.size());
+        return !Double.isNaN(rating) ? rating : 0;
     }
 }

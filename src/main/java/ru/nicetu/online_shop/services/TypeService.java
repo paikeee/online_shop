@@ -1,6 +1,7 @@
 package ru.nicetu.online_shop.services;
 
 import ru.nicetu.online_shop.dto.request.TypeRequest;
+import ru.nicetu.online_shop.dto.response.TypeProductsDTO;
 import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.models.Type;
 
@@ -16,10 +17,14 @@ public interface TypeService {
 
     void addType(Type type, TypeRequest request);
 
-    List<Product> getProductsByType(int id);
+    List<Product> getProductsByType(Type type);
 
     void delete(int id);
 
     void addProducts(int id, List<Integer> productsList);
+
+    TypeProductsDTO buildTypeProducts(int id);
+
+    List<Type> findChildTypes(Type type);
 
 }
