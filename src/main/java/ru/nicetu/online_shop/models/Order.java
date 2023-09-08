@@ -1,6 +1,7 @@
 package ru.nicetu.online_shop.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class Order {
         this.date = LocalDate.now();
         this.paymentDone = false;
         this.person = person;
+        this.orderProducts = new ArrayList<>();
     }
 
     @Id

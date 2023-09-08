@@ -5,26 +5,27 @@ import lombok.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 public class RegistrationRequest {
 
-    @NotEmpty(message = "Insert email")
-    @Email(message = "Wrong format of email")
+    @Email(message = "Неверный формат EMail")
     private final String email;
 
-    @NotEmpty(message = "Insert password")
-    @Size(min = 6, message = "Min size of password is 6")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 6, message = "Пароль должен состоять минимум из 6 символов")
     private final String password;
 
-    @NotEmpty(message = "Insert name")
-    @Size(min = 2, max = 50, message = "Name size is 2 to 50")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min=2, max=50, message = "Длина имени от 2 до 50 символов")
     private final String name;
 
-    @NotEmpty(message = "Insert surname")
-    @Size(min = 2, max = 50, message = "Surname size is 2 to 50")
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min=2, max=50, message = "Длина фамилии от 2 до 50 символов")
     private final String surname;
 
+    private Set<String> role;
 }

@@ -39,9 +39,4 @@ public class OrderProduct {
     public int getTotalPrice() {
         return getProduct().getActualPrice() * getQuantity();
     }
-
-    @Override
-    public String toString() {
-        return getProduct().getName() + " * " + getQuantity() + " = " + getTotalPrice() + " RUB";
-    }
 }
