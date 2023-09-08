@@ -1,6 +1,6 @@
 package ru.nicetu.online_shop.security.config;
 
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,11 +8,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.nicetu.online_shop.security.jwt.AuthEntryPoint;
 import ru.nicetu.online_shop.security.jwt.AuthTokenFilter;
@@ -20,12 +20,14 @@ import ru.nicetu.online_shop.services.PersonDetailsService;
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
 public class WebSecurityConfig {
 
+    @Autowired
     private PersonDetailsService personDetailsService;
 
+    @Autowired
     private AuthEntryPoint unauthorizedHandler;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,13 +36,9 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests( auth -> auth
-                        .antMatchers("/register").permitAll()
+                        .antMatchers("/registration").permitAll()
                         .antMatchers("/login").permitAll()
-                        .antMatchers("/catalog/product/**/comment/add").authenticated()
-                        .antMatchers("/catalog/**").permitAll()
-                        .antMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+                        .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
 
@@ -52,6 +50,11 @@ public class WebSecurityConfig {
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/js/**", "/images/**");
     }
 
     @Bean
@@ -72,11 +75,6 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler(){
-        return new CustomAccessDeniedHandler();
     }
 
 }

@@ -1,28 +1,23 @@
 package ru.nicetu.online_shop.services;
 
-import ru.nicetu.online_shop.dto.request.OrderRequest;
-import ru.nicetu.online_shop.dto.response.OrderDTO;
 import ru.nicetu.online_shop.models.Order;
 import ru.nicetu.online_shop.models.OrderProduct;
+import ru.nicetu.online_shop.models.Product;
 
 import java.util.List;
 
 public interface OrderService {
 
-    Order getOrder(int id);
+    Iterable<Order> getAllOrders();
 
-    void save(Order order);
+    void create(Order order);
+
+    void update(Order order);
+
+    void addProduct(Order order, Product product, int quantity);
 
     int getTotalPrice(List<OrderProduct> orderProducts);
 
-    void deleteSelectedProducts(List<OrderProduct> orderProducts);
-
-    void checkSelectedProducts(List<OrderProduct> orderProducts);
-
-    OrderDTO newOrder(OrderRequest request);
-
-    void makePurchase(int id);
-
-    void checkCustomer(Order order);
+    public void saveOrderProduct(List<OrderProduct> orderProducts);
 
 }
