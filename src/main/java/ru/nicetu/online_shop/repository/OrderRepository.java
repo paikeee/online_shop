@@ -13,5 +13,4 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     Optional<Order> findByOrderId(int id);
 
-
 }
