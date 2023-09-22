@@ -8,7 +8,6 @@ import ru.nicetu.online_shop.models.Order;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     Optional<Order> findByOrderId(int id);

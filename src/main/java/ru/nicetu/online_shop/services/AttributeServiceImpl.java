@@ -6,6 +6,7 @@ import ru.nicetu.online_shop.dto.response.AttributeValueDTO;
 import ru.nicetu.online_shop.dto.response.AttributesDTO;
 import ru.nicetu.online_shop.models.Attribute;
 import ru.nicetu.online_shop.models.AttributeValue;
+import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.models.Type;
 import ru.nicetu.online_shop.repository.AttributeRepository;
 import ru.nicetu.online_shop.repository.AttributeValueRepository;
@@ -49,12 +50,15 @@ public class AttributeServiceImpl implements AttributeService {
     @Override
     @Transactional
     public void saveProductAttributes(int id, Map<Integer, String> values) {
-       values.forEach((key, value) -> {
-            Attribute attribute = get(key);
+        Map<Integer, List<AttributeValue>> attributeListMap = new HashMap<>();
+        values.keySet().forEach(it -> attributeListMap.put(it, get(it).getAttributeValues()));
+        values.forEach((key, value) -> {
             AttributeValue attributeValue = new AttributeValue(value);
             attributeValueRepository.save(attributeValue);
-            attribute.addValue(attributeValue);
-            attributeValue.addProduct(productService.getProduct(id));
+            attributeListMap.get(key).add(attributeValue);
+            List<Product> productList = attributeValue.getProducts();
+            productList.add(productService.getProduct(id));
+            attributeValue.setProducts(productList);
        });
     }
 

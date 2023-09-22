@@ -34,16 +34,12 @@ public class AdminController {
     @PostMapping(path = "product/add")
     public ResponseEntity<ProductDTO> addProduct(@RequestPart("productRequest") @Valid ProductRequest request,
                                                 @RequestPart("image") List<MultipartFile> files) {
-        Product product = new Product(
-                request.getName(),
-                request.getDescription(),
-                request.getPrice(),
-                request.getAmount(),
-                request.getDiscount()
-        );
-        productService.save(product);
-        pictureService.save(files, product);
-        return ResponseEntity.ok(new ProductDTO(product));
+        Product product = productService.save(request, files);
+        return ResponseEntity.ok(new ProductDTO(
+                product,
+                productService.getActualPrice(product),
+                productService.getRating(product)
+        ));
     }
 
     @PostMapping(path = "product/{productId}/settings", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -51,7 +47,11 @@ public class AdminController {
                                                @RequestBody @Valid ProductRequest settings) {
         Product product = productService.getProduct(productId);
         productService.settings(product, settings);
-        return ResponseEntity.ok(new ProductDTO(product));
+        return ResponseEntity.ok(new ProductDTO(
+                product,
+                productService.getActualPrice(product),
+                productService.getRating(product)
+        ));
     }
 
     @PostMapping(path = "product/{}/settings/{pictureId}/delete")

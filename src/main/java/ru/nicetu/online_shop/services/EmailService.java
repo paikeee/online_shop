@@ -6,6 +6,4 @@ public interface EmailService {
 
     void sendEmail(String to, String subject, String message);
 
-    String buildPurchaseMessage(Order order);
-
 }

@@ -41,8 +41,4 @@ public class Attribute {
             inverseJoinColumns = @JoinColumn(name = "type_id"))
     private List<Type> types;
 
-    @Transient
-    public void addValue(AttributeValue value) {
-        attributeValues.add(value);
-    }
 }

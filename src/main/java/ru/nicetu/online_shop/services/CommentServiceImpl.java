@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.nicetu.online_shop.dto.request.CommentRequest;
 import ru.nicetu.online_shop.models.Comment;
+import ru.nicetu.online_shop.models.Picture;
 import ru.nicetu.online_shop.repository.CommentRepository;
 
 import javax.transaction.Transactional;
@@ -44,6 +45,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public Comment addComment(int productId, CommentRequest request, List<MultipartFile> files) {
+        List<Picture> pictures = pictureService.save(files);
         Comment comment = new Comment(
                 request.getRating(),
                 request.getText(),
@@ -51,9 +53,7 @@ public class CommentServiceImpl implements CommentService {
                 personDetailsService.currentUser()
         );
         save(comment);
-        if (files.size() == 1 && Objects.equals(files.get(0).getOriginalFilename(), "")) {
-            comment.setPictures(pictureService.save(files, comment));
-        }
+        comment.setPictures(pictures);
         return comment;
     }
 }

@@ -22,6 +22,7 @@ public class FilterServiceImpl implements FilterService {
     private final TypeServiceImpl typeService;
     private final AttributeServiceImpl attributeService;
     private final PersonDetailsService personDetailsService;
+    private final ProductServiceImpl productService;
 
     private List<Product> filter(Type type, FilterRequest request) {
         Set<Product> products = new HashSet<>();
@@ -37,19 +38,19 @@ public class FilterServiceImpl implements FilterService {
 
         if (personDetailsService.isAuth()) {
             return products.stream().filter(it ->
-                            it.getActualPrice() >= request.getMin()
-                            &&
-                            it.getActualPrice() <= request.getMax()
-                            &&
-                            it.getRating() >= request.getRating()
+                                    productService.getActualPrice(it) >= request.getMin()
+                                    &&
+                                    productService.getActualPrice(it) <= request.getMax()
+                                    &&
+                                    productService.getRating(it) >= request.getRating()
                     ).collect(Collectors.toList());
         } else {
             return products.stream().filter(it ->
-                    it.getActualPrice() >= request.getMin()
+                            it.getPrice() >= request.getMin()
                             &&
-                            it.getActualPrice() <= request.getMax()
+                            it.getPrice() <= request.getMax()
                             &&
-                            it.getRating() >= request.getRating()
+                            productService.getRating(it) >= request.getRating()
                     ).collect(Collectors.toList());
         }
     }
@@ -59,8 +60,11 @@ public class FilterServiceImpl implements FilterService {
         Type type = typeService.findTypeById(typeId);
         return new TypeProductsDTO(
                 filter(type, request).stream()
-                        .map(ProductTypeResponse::new)
-                        .collect(Collectors.toList()),
+                        .map(it -> new ProductTypeResponse(
+                                it,
+                                productService.getActualPrice(it),
+                                productService.getRating(it)
+                        )).collect(Collectors.toList()),
                 type.getAttributes().stream()
                         .map(it -> new AttributesDTO(
                                 it.getAttributeId(),

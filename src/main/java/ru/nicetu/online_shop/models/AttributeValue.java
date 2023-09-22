@@ -35,8 +35,4 @@ public class AttributeValue {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products = new ArrayList<>();
 
-    @Transient
-    public void addProduct(Product product) {
-        products.add(product);
-    }
 }

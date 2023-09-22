@@ -14,14 +14,8 @@ import javax.persistence.*;
 @Table(name = "picture")
 public class Picture {
 
-    public Picture(byte[] image, Product product) {
+    public Picture(byte[] image) {
         this.image = image;
-        this.product = product;
-    }
-
-    public Picture(byte[] image, Comment comment) {
-        this.image = image;
-        this.comment = comment;
     }
 
     @Id

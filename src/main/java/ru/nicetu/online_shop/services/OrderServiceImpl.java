@@ -7,6 +7,7 @@ import ru.nicetu.online_shop.dto.response.OrderDTO;
 import ru.nicetu.online_shop.models.Order;
 import ru.nicetu.online_shop.models.OrderProduct;
 import ru.nicetu.online_shop.models.Person;
+import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.repository.OrderRepository;
 
 import javax.transaction.Transactional;
@@ -37,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int getTotalPrice(List<OrderProduct> orderProducts) {
         return orderProducts.stream()
-                .mapToInt(OrderProduct::getTotalPrice).sum();
+                .mapToInt(this::getOrderProductPrice).sum();
     }
 
     @Override
@@ -45,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
     public void deleteSelectedProducts(List<OrderProduct> orderProducts) {
         checkSelectedProducts(orderProducts);
         orderProducts.stream()
-                .collect(Collectors.toMap(OrderProduct::getProduct, OrderProduct::getQuantity))
+                .collect(Collectors.toMap(this::getProduct, OrderProduct::getQuantity))
                 .forEach((product, quantity) -> {
                     product.setAmount(product.getAmount() - quantity);
                     productService.save(product);
@@ -55,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void checkSelectedProducts(List<OrderProduct> orderProducts) {
         orderProducts.stream()
-                .collect(Collectors.toMap(OrderProduct::getProduct, OrderProduct::getQuantity))
+                .collect(Collectors.toMap(this::getProduct, OrderProduct::getQuantity))
                 .forEach((product, quantity) -> {
                     if (product.getAmount() < quantity) {
                         throw new NoSuchElementException("Bad quantity for product with id: " + product.getProductId());
@@ -77,8 +78,8 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
         int totalPrice = getTotalPrice(orderProducts);
         deleteSelectedProducts(orderProducts);
-        order.setOrderProducts(orderProducts);
         save(order);
+        order.setOrderProducts(orderProducts);
         return new OrderDTO(
                 order.getOrderId(),
                 totalPrice,
@@ -94,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
         emailService.sendEmail(
                 order.getPerson().getEmail(),
                 "Order №" + id,
-                emailService.buildPurchaseMessage(order)
+                buildPurchaseEmail(order)
         );
         order.setPaymentDone(true);
         save(order);
@@ -107,4 +108,31 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    public Product getProduct(OrderProduct orderProduct) {
+        return orderProduct.getPk().getProduct();
+    }
+
+    public int getOrderProductPrice(OrderProduct orderProduct) {
+        return productService.getActualPrice(getProduct(orderProduct)) * orderProduct.getQuantity();
+    }
+
+    public String buildPurchaseEmail(Order order) {
+        return "Hello, " + personDetailsService.username(order.getPerson()) + "!\n" +
+                "Your order №" + order.getOrderId() + " has been successfully placed.\n" +
+                "Your order:\n" +
+                buildOrderMessage(order) +
+                "Total: " + getTotalPrice(order.getOrderProducts()) + " RUB";
+    }
+
+    private String buildOrderMessage(Order order) {
+        StringBuilder message = new StringBuilder();
+        order.getOrderProducts().forEach(it -> message.append(orderProductToString(it)).append("\n"));
+        return message.toString();
+    }
+
+    private String orderProductToString(OrderProduct orderProduct) {
+        return getProduct(orderProduct).getName() +
+                " * " + orderProduct.getQuantity() +
+                " = " + getOrderProductPrice(orderProduct) + " RUB";
+    }
 }

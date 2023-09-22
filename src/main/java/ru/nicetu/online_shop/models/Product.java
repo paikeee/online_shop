@@ -79,16 +79,4 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "value_id"))
     private List<AttributeValue> attributeValues = new ArrayList<>();
 
-    @Transient
-    public int getActualPrice() {
-        return getPrice() * (100 - getDiscount()) / 100;
-    }
-
-    @Transient
-    public double getRating() {
-        double rating = ((double) commentList.stream()
-                .mapToInt(Comment::getRating).sum()) /
-                ((double) commentList.size());
-        return !Double.isNaN(rating) ? rating : 0;
-    }
 }

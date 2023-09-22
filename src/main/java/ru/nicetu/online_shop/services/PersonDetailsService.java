@@ -44,4 +44,8 @@ public class PersonDetailsService implements UserDetailsService {
                 !(SecurityContextHolder.getContext().getAuthentication()
                         instanceof AnonymousAuthenticationToken);
     }
+
+    public String username(Person person) {
+        return person.getName() + " " + person.getSurname();
+    }
 }

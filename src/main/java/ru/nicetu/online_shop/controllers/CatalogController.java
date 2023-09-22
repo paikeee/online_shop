@@ -12,6 +12,7 @@ import ru.nicetu.online_shop.dto.response.CommentResponse;
 import ru.nicetu.online_shop.dto.response.ProductDTO;
 import ru.nicetu.online_shop.dto.response.TypeProductsDTO;
 import ru.nicetu.online_shop.models.Comment;
+import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.services.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -41,7 +42,12 @@ public class CatalogController {
 
     @GetMapping(path = "/product/{productId}")
     public ResponseEntity<ProductDTO> getProduct(@PathVariable("productId") int productId) {
-        return ResponseEntity.ok(new ProductDTO(productService.getProduct(productId)));
+        Product product = productService.getProduct(productId);
+        return ResponseEntity.ok(new ProductDTO(
+                product,
+                productService.getActualPrice(product),
+                productService.getRating(product)
+        ));
     }
 
     @PostMapping(path = "/product/{productId}/comment/add")

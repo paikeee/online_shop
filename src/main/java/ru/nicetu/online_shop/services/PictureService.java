@@ -9,9 +9,8 @@ import java.util.List;
 
 public interface PictureService {
 
-    void save(List<MultipartFile> files, Product product);
+    List<Picture> save(List<MultipartFile> files);
 
-    List<Picture> save(List<MultipartFile> files, Comment comment);
 
     void delete(int id);
 

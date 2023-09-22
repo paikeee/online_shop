@@ -65,8 +65,4 @@ public class Person {
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private List<Comment> commentList = new ArrayList<>();
 
-    @Transient
-    public String username() {
-        return name + " " + surname;
-    }
 }

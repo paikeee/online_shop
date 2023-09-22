@@ -10,7 +10,6 @@ import ru.nicetu.online_shop.models.Person;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 
     Optional<Person> findByEmail(String email);

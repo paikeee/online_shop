@@ -8,6 +8,7 @@ import ru.nicetu.online_shop.models.Picture;
 import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.repository.PictureRepository;
 
+import javax.management.remote.rmi._RMIConnection_Stub;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,27 +22,19 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     @Transactional
-    public void save(List<MultipartFile> files, Product product) {
+    public List<Picture> save(List<MultipartFile> files) {
         if (files.size() == 1 && Objects.equals(files.get(0).getOriginalFilename(), "")) {
-            return;
+            return new ArrayList<>();
         }
-        for (MultipartFile file : files) {
-            try {
-                Picture picture = new Picture(file.getBytes(), product);
-                pictureRepository.save(picture);
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
-        }
-    }
-
-    @Override
-    @Transactional
-    public List<Picture> save(List<MultipartFile> files, Comment comment) {
         List<Picture> pictures = new ArrayList<>();
         for (MultipartFile file : files) {
+            if (file.getContentType() != null && !file.getContentType().startsWith("image")) {
+                throw new RuntimeException("Detached file is not an image");
+            }
+        }
+        for (MultipartFile file : files) {
             try {
-                Picture picture = new Picture(file.getBytes(), comment);
+                Picture picture = new Picture(file.getBytes());
                 pictures.add(picture);
                 pictureRepository.save(picture);
             } catch (Exception e) {

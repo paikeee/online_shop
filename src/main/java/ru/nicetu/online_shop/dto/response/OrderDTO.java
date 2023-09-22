@@ -2,12 +2,14 @@ package ru.nicetu.online_shop.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import ru.nicetu.online_shop.models.OrderProduct;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class OrderDTO {
 

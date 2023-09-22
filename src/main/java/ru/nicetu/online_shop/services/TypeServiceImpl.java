@@ -89,8 +89,11 @@ public class TypeServiceImpl implements TypeService {
         Type type = findTypeById(id);
         return new TypeProductsDTO(
                 getProductsByType(type).stream()
-                        .map(ProductTypeResponse::new)
-                        .collect(Collectors.toList()),
+                        .map(it -> new ProductTypeResponse(
+                                it,
+                                productService.getActualPrice(it),
+                                productService.getRating(it)
+                        )).collect(Collectors.toList()),
                 type.getAttributes().stream()
                         .map(it -> new AttributesDTO(
                                 it.getAttributeId(),
@@ -104,6 +107,7 @@ public class TypeServiceImpl implements TypeService {
         );
     }
 
+    @Override
     public List<Type> findChildTypes(Type type) {
         List<Type> typeList = new ArrayList<>();
         typeRepository.findTypesByParentId(type.getTypeId())

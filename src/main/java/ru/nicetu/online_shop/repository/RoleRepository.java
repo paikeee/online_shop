@@ -11,7 +11,6 @@ import ru.nicetu.online_shop.models.Role;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
     Optional<Role> findByName(PersonRole name);

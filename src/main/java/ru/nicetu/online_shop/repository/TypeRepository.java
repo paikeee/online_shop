@@ -8,7 +8,6 @@ import ru.nicetu.online_shop.models.Type;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public interface TypeRepository extends JpaRepository<Type, Integer> {
 
     Optional<Type> findByTypeId(int id);

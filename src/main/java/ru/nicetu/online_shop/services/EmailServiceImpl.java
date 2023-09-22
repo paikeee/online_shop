@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import ru.nicetu.online_shop.models.Order;
-import ru.nicetu.online_shop.models.OrderProduct;
 
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -24,15 +21,4 @@ public class EmailServiceImpl implements EmailService {
         emailSender.send(simpleMailMessage);
     }
 
-    @Override
-    public String buildPurchaseMessage(Order order) {
-        StringBuilder products = new StringBuilder();
-        List<OrderProduct> productList = order.getOrderProducts();
-        productList.forEach( it -> products.append(it.toString()).append("\n"));
-        return "Hello, " + order.getPerson().username() + "!\n" +
-                "Your order №" + order.getOrderId() + " has been successfully placed.\n" +
-                "Your order:\n" +
-                products +
-                "Total: " + productList.stream().mapToInt(OrderProduct::getTotalPrice).sum() + " RUB";
-    }
 }

@@ -20,18 +20,18 @@ public class ProductTypeResponse {
     private final List<byte[]> pictures;
     private final double rating;
 
-    public ProductTypeResponse(Product product) {
+    public ProductTypeResponse(Product product, int actualPrice, double rating) {
         this.productId = product.getProductId();
         this.name = product.getName();
         this.description = product.getDescription();
         this.price = product.getPrice();
-        this.actualPrice = product.getActualPrice();
+        this.actualPrice = actualPrice;
         this.amount = product.getAmount();
         this.discount = product.getDiscount();
         this.pictures = product.getPictureList().stream()
                 .map(Picture::getImage)
                 .collect(Collectors.toList());
-        this.rating = product.getRating();
+        this.rating = rating;
     }
 
 }

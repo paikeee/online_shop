@@ -8,7 +8,6 @@ import ru.nicetu.online_shop.models.Comment;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     Optional<Comment> findByCommentId(int id);

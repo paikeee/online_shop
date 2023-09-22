@@ -21,21 +21,21 @@ public class ProductDTO {
     private final double rating;
     private final List<CommentDTO> comments;
 
-    public ProductDTO(Product product) {
+    public ProductDTO(Product product, int actualPrice, double rating) {
         this.productId = product.getProductId();
         this.name = product.getName();
         this.description = product.getDescription();
         this.price = product.getPrice();
-        this.actualPrice = product.getActualPrice();
+        this.actualPrice = actualPrice;
         this.amount = product.getAmount();
         this.discount = product.getDiscount();
         this.pictures = product.getPictureList().stream()
                 .map(Picture::getImage)
                 .collect(Collectors.toList());
-        this.rating = product.getRating();
+        this.rating = rating;
         this.comments = product.getCommentList().stream()
                 .map(it -> new CommentDTO(
-                        it.getPerson().username(),
+                        it.getPerson().getName() + " " + it.getPerson().getSurname(),
                         it.getRating(),
                         it.getText(),
                         it.getPictures().stream()

@@ -8,7 +8,6 @@ import ru.nicetu.online_shop.models.Product;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Optional<Product> findByProductId(int id);

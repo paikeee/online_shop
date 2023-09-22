@@ -8,7 +8,6 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public interface AttributeRepository extends JpaRepository<Attribute, Integer> {
 
     Optional<Attribute> findAttributeByAttributeId(int attributeId);

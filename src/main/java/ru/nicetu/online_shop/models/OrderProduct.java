@@ -29,19 +29,4 @@ public class OrderProduct {
         pk.setProduct(product);
         this.quantity = quantity;
     }
-
-    @Transient
-    public Product getProduct() {
-        return this.pk.getProduct();
-    }
-
-    @Transient
-    public int getTotalPrice() {
-        return getProduct().getActualPrice() * getQuantity();
-    }
-
-    @Override
-    public String toString() {
-        return getProduct().getName() + " * " + getQuantity() + " = " + getTotalPrice() + " RUB";
-    }
 }
