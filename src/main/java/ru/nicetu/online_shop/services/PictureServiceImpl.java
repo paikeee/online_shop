@@ -3,12 +3,9 @@ package ru.nicetu.online_shop.services;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.nicetu.online_shop.models.Comment;
 import ru.nicetu.online_shop.models.Picture;
-import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.repository.PictureRepository;
 
-import javax.management.remote.rmi._RMIConnection_Stub;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;

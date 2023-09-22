@@ -11,7 +11,6 @@ import ru.nicetu.online_shop.repository.CommentRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @AllArgsConstructor
 @Service
