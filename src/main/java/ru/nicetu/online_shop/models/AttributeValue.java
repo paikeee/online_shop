@@ -1,11 +1,7 @@
 package ru.nicetu.online_shop.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter

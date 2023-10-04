@@ -49,7 +49,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     @Transactional
-    public Product saveProductAttributes(int id, Map<Integer, String> values) {
+    public void saveProductAttributes(int id, Map<Integer, String> values) {
         Product product = productService.getProduct(id);
         Map<Integer, List<AttributeValue>> attributeListMap = new HashMap<>();
         values.keySet().forEach(it -> attributeListMap.put(it, get(it).getAttributeValues()));
@@ -73,7 +73,6 @@ public class AttributeServiceImpl implements AttributeService {
             attributeValues.add(attributeValue);
             product.setAttributeValues(attributeValues);
        });
-        return product;
     }
 
 

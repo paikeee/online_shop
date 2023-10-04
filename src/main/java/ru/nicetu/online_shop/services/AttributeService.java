@@ -3,7 +3,6 @@ package ru.nicetu.online_shop.services;
 import ru.nicetu.online_shop.dto.response.AttributesDTO;
 import ru.nicetu.online_shop.models.Attribute;
 import ru.nicetu.online_shop.models.AttributeValue;
-import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.models.Type;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public interface AttributeService {
 
     void saveAttributes(int id, List<String> names);
 
-    Product saveProductAttributes(int id, Map<Integer, String> values);
+    void saveProductAttributes(int id, Map<Integer, String> values);
 
     List<Attribute> getAttributes(List<Type> types);
 

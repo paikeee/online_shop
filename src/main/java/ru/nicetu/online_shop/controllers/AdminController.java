@@ -12,7 +12,6 @@ import ru.nicetu.online_shop.dto.response.AttributesDTO;
 import ru.nicetu.online_shop.dto.response.MessageResponse;
 import ru.nicetu.online_shop.dto.response.ProductDTO;
 import ru.nicetu.online_shop.models.Product;
-import ru.nicetu.online_shop.models.Type;
 import ru.nicetu.online_shop.services.*;
 
 import javax.validation.Valid;
