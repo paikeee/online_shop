@@ -7,6 +7,7 @@ import ru.nicetu.online_shop.dto.response.AttributeValueDTO;
 import ru.nicetu.online_shop.dto.response.AttributesDTO;
 import ru.nicetu.online_shop.dto.response.ProductTypeResponse;
 import ru.nicetu.online_shop.dto.response.TypeProductsDTO;
+import ru.nicetu.online_shop.models.AttributeValue;
 import ru.nicetu.online_shop.models.Product;
 import ru.nicetu.online_shop.models.Type;
 
@@ -20,21 +21,20 @@ import java.util.stream.Collectors;
 public class FilterServiceImpl implements FilterService {
 
     private final TypeServiceImpl typeService;
-    private final AttributeServiceImpl attributeService;
     private final PersonDetailsService personDetailsService;
     private final ProductServiceImpl productService;
 
     private List<Product> filter(Type type, FilterRequest request) {
-        Set<Product> products = new HashSet<>();
         List<Integer> valuesId = request.getValuesId();
-
-        if (valuesId.isEmpty()) {
-            products.addAll(typeService.getProductsByType(type));
-        } else {
-            valuesId.stream()
-                    .map(attributeService::getValue)
-                    .forEach(it -> products.addAll(it.getProducts()));
-        }
+        Set<Product> products = new HashSet<>();
+        typeService.getProductsByType(type).forEach(it -> {
+           if (new HashSet<>(it.getAttributeValues().stream()
+                   .map(AttributeValue::getValueId)
+                   .collect(Collectors.toList()))
+                   .containsAll(valuesId)) {
+               products.add(it);
+           }
+        });
 
         if (personDetailsService.isAuth()) {
             return products.stream().filter(it ->

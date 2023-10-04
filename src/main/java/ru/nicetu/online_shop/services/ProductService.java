@@ -18,5 +18,7 @@ public interface ProductService {
 
     void settings(Product product, ProductRequest settings);
 
-    Product findById(int id);
+    int getActualPrice(Product product);
+
+    double getRating(Product product);
 }

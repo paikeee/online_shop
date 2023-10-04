@@ -62,8 +62,7 @@ public class AdminController {
 
     @PostMapping(path = "/type/add")
     public ResponseEntity<MessageResponse> addType(@RequestBody @Valid TypeRequest request) {
-        Type type = new Type(request.getTypeName(), request.getParentId());
-        typeService.addType(type, request);
+        typeService.addType(request);
         return ResponseEntity.ok(new MessageResponse("Type added"));
     }
 

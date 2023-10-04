@@ -4,6 +4,7 @@ import ru.nicetu.online_shop.dto.request.OrderRequest;
 import ru.nicetu.online_shop.dto.response.OrderDTO;
 import ru.nicetu.online_shop.models.Order;
 import ru.nicetu.online_shop.models.OrderProduct;
+import ru.nicetu.online_shop.models.Product;
 
 import java.util.List;
 
@@ -24,5 +25,11 @@ public interface OrderService {
     void makePurchase(int id);
 
     void checkCustomer(Order order);
+
+    Product getProduct(OrderProduct orderProduct);
+
+    int getOrderProductPrice(OrderProduct orderProduct);
+
+    String buildPurchaseEmail(Order order);
 
 }

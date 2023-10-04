@@ -49,17 +49,31 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     @Transactional
-    public void saveProductAttributes(int id, Map<Integer, String> values) {
+    public Product saveProductAttributes(int id, Map<Integer, String> values) {
+        Product product = productService.getProduct(id);
         Map<Integer, List<AttributeValue>> attributeListMap = new HashMap<>();
         values.keySet().forEach(it -> attributeListMap.put(it, get(it).getAttributeValues()));
         values.forEach((key, value) -> {
-            AttributeValue attributeValue = new AttributeValue(value);
-            attributeValueRepository.save(attributeValue);
-            attributeListMap.get(key).add(attributeValue);
-            List<Product> productList = attributeValue.getProducts();
-            productList.add(productService.getProduct(id));
-            attributeValue.setProducts(productList);
+            Attribute attribute = get(key);
+            AttributeValue attributeValue = new AttributeValue();
+            boolean isPresent = false;
+            for (AttributeValue it : attribute.getAttributeValues()) {
+                if (it.getValue().equals(value)) {
+                    isPresent = true;
+                    attributeValue = it;
+                    break;
+                }
+            }
+            if (!isPresent) {
+                attributeValue = new AttributeValue(value);
+                attributeValueRepository.save(attributeValue);
+                attributeListMap.get(key).add(attributeValue);
+            }
+            List<AttributeValue> attributeValues = new ArrayList<>(product.getAttributeValues());
+            attributeValues.add(attributeValue);
+            product.setAttributeValues(attributeValues);
        });
+        return product;
     }
 
 

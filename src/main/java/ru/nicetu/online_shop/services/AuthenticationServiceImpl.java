@@ -31,11 +31,11 @@ import java.util.stream.Collectors;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService{
 
-    private final PersonRepository personRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder encoder;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
+    private PersonRepository personRepository;
+    private RoleRepository roleRepository;
+    private PasswordEncoder encoder;
+    private AuthenticationManager authenticationManager;
+    private JwtUtils jwtUtils;
 
     @Override
     @Transactional

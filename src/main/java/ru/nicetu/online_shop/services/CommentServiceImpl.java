@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = new Comment(
                 request.getRating(),
                 request.getText(),
-                productService.findById(productId),
+                productService.getProduct(productId),
                 personDetailsService.currentUser()
         );
         save(comment);

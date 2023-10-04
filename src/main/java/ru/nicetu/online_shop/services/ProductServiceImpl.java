@@ -61,15 +61,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findById(int id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Product with id " + id + "not found"));
-    }
-
     public int getActualPrice(Product product) {
         return product.getPrice() * (100 - product.getDiscount()) / 100;
     }
 
+    @Override
     public double getRating(Product product) {
         double rating = ((double) product.getCommentList().stream()
                 .mapToInt(Comment::getRating).sum()) /

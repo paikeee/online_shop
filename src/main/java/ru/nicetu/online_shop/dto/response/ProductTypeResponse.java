@@ -1,5 +1,6 @@
 package ru.nicetu.online_shop.dto.response;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import ru.nicetu.online_shop.models.Picture;
 import ru.nicetu.online_shop.models.Product;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@EqualsAndHashCode
 public class ProductTypeResponse {
 
     private final int productId;

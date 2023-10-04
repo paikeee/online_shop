@@ -40,12 +40,14 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     @Transactional
-    public void addType(Type type, TypeRequest request) {
+    public Type addType(TypeRequest request) {
+        Type type = new Type(request.getTypeName(), request.getParentId());
         type.setProductList(
                 request.getProductList().stream()
-                        .map(productService::findById)
+                        .map(productService::getProduct)
                         .collect(Collectors.toList()));
         save(type);
+        return type;
     }
 
     @Override
@@ -74,14 +76,16 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     @Transactional
-    public void addProducts(int id, List<Integer> productsList) {
+    public List<Product> addProducts(int id, List<Integer> productsList) {
         Type type = findTypeById(id);
         Set<Product> productsSet = productsList.stream()
-                .map(productService::findById)
+                .map(productService::getProduct)
                 .collect(Collectors.toSet());
         productsSet.addAll(type.getProductList());
-        type.setProductList(new ArrayList<>(productsSet));
+        List<Product> list = new ArrayList<>(productsSet);
+        type.setProductList(list);
         save(type);
+        return list;
     }
 
     @Override

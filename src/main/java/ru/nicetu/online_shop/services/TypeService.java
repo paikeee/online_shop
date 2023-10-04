@@ -15,13 +15,13 @@ public interface TypeService {
 
     Type findTypeById(int id);
 
-    void addType(Type type, TypeRequest request);
+    Type addType(TypeRequest request);
 
     List<Product> getProductsByType(Type type);
 
     void delete(int id);
 
-    void addProducts(int id, List<Integer> productsList);
+    List<Product> addProducts(int id, List<Integer> productsList);
 
     TypeProductsDTO buildTypeProducts(int id);
 

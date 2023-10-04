@@ -108,14 +108,17 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
     public Product getProduct(OrderProduct orderProduct) {
         return orderProduct.getPk().getProduct();
     }
 
+    @Override
     public int getOrderProductPrice(OrderProduct orderProduct) {
         return productService.getActualPrice(getProduct(orderProduct)) * orderProduct.getQuantity();
     }
 
+    @Override
     public String buildPurchaseEmail(Order order) {
         return "Hello, " + personDetailsService.username(order.getPerson()) + "!\n" +
                 "Your order №" + order.getOrderId() + " has been successfully placed.\n" +
