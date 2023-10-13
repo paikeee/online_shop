@@ -1,10 +1,7 @@
 package ru.nicetu.online_shop.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -28,15 +25,5 @@ public class OrderProduct {
         pk.setOrder(order);
         pk.setProduct(product);
         this.quantity = quantity;
-    }
-
-    @Transient
-    public Product getProduct() {
-        return this.pk.getProduct();
-    }
-
-    @Transient
-    public int getTotalPrice() {
-        return getProduct().getActualPrice() * getQuantity();
     }
 }

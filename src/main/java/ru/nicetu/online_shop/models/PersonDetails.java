@@ -2,6 +2,8 @@ package ru.nicetu.online_shop.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,12 +13,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@EqualsAndHashCode
 public class PersonDetails implements UserDetails {
 
+    @Getter
     private int id;
+
     private String email;
+
     @JsonIgnore
     private String password;
+
     private Collection<? extends GrantedAuthority> authorities;
 
     public static PersonDetails build(Person person) {
@@ -67,7 +74,4 @@ public class PersonDetails implements UserDetails {
         return true;
     }
 
-    public int getId() {
-        return id;
-    }
 }
